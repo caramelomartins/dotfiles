@@ -1,5 +1,4 @@
 tap "derailed/k9s"
-tap "homebrew/bundle"
 tap "withgraphite/tap"
 brew "awscli"
 brew "azure-cli"
