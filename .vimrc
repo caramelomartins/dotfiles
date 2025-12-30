@@ -38,7 +38,7 @@ call plug#end()
 :lua require('ibl').setup({})
 :lua require('gitsigns').setup({})
 :lua require('lualine').setup({})
-:lua require('nvim-treesitter.configs').setup({ highlight = { enable = true } })
+:lua require('nvim-treesitter').setup({ highlight = { enable = true } })
 :lua require('claude-code').setup({ window = { split_ratio = 0.35, position = "vertical rightbelow" }, command_variants = { continue = "--continue" } })
 
 set termguicolors

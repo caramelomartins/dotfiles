@@ -17,6 +17,13 @@
 [core]
     editor = nvim
     excludesfile = ~/.gitignore
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
 
 [gpg "ssh"]
 	allowedSignersFile = /Users/hugo.martins/.ssh/allowed_signers
