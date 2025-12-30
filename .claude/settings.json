@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "mcp__atlassian__getConfluenceSpaces",
+      "mcp__atlassian__searchConfluenceUsingCql",
+      "mcp__atlassian__getConfluencePage",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(bzl build:*)",
+      "Bash(bzl test:*)",
+      "Bash(bzl run //:gazelle)"
+    ]
+  },
+  "alwaysThinkingEnabled": false
+}
