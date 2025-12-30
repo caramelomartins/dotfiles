@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 export PATH="/opt/homebrew/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
 
 # Start TMUX when launching a new instance of zsh.
 if [ -z "$TMUX" ]
@@ -11,6 +11,8 @@ fi
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Load auxiliary files.
 source "$HOME/.zsh_functions"
