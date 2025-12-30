@@ -1,14 +1,6 @@
 [color]
     ui = auto
 
-[push]
-    default = matching
-
-[core]
-    editor = nvim
-    excludesfile = ~/.gitignore
-	hooksPath = /usr/local/dd/global_hooks
-
 [alias]
     prb = remote update origin --prune
     last = log -1 HEAD
@@ -19,11 +11,21 @@
     br = branch
     pr = pull --rebase
 
+[push]
+    default = matching
+
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore
+
+[gpg "ssh"]
+	allowedSignersFile = /Users/hugo.martins/.ssh/allowed_signers
+
 [url "git@github.com:"]
     insteadOf = https://github.com/
 
 [include]
-    path = "~/.gitconfig.id"
+    path = "~/.gitconfig.local"
 
 [includeIf "gitdir:~/pp/"]
     path = "~/pp/.gitconfig"

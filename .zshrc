@@ -16,6 +16,19 @@ export LANG=en_US.UTF-8
 source "$HOME/.zsh_functions"
 source "$HOME/.aliases"
 
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+
+if command -v pyenv > /dev/null; then
+      eval "$(pyenv init --path)"
+fi
+
+if [[ ! -d "$(pyenv root)/plugins/pyenv-virtualenv" ]]; then
+    eval "$(pyenv virtualenv-init -)"
+fi
+
 # Homebrew
 if [[ $OSTYPE == 'linux-gnu' ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -48,31 +61,27 @@ if [ -d "$HOME/.kube/profiles/" ]; then
     fi
 fi
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
-if command -v pyenv > /dev/null; then
-      eval "$(pyenv init -)"
-fi
-
-if [[ ! -d "$(pyenv root)/plugins/pyenv-virtualenv" ]]; then
-    eval "$(pyenv virtualenv-init -)"
-fi
-
-# tfenv
-export PATH="$HOME/.tfenv/bin:$PATH"
-
 # Editor
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
+# Add .local/bin to $PATH.
 [[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && PATH="$HOME/.local/bin:${PATH}"
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
 
 # Load extra configurations on a given machine.
-if [ -d "~/.zsh" ]; then
-  for f in ~/.zsh/*; do source $f; done
+if [ -d "$HOME/.zsh/" ]; then
+  for f in $HOME/.zsh/*; do
+    source $f
+  done
 fi
+
+# Gitlab
+export GITLAB_TOKEN=$(security find-generic-password -a ${USER} -s gitlab_token -w)
+
+# Add signing key for Github commit signing.
+ssh-add -l | grep -q ED25519 || ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+
+PS1='$(kube_ps1)'$PS1

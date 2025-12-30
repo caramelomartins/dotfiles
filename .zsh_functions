@@ -1,1 +1,9 @@
-
+coverage() {
+	bzlquery=$(echo "kind(go_test, $1)")
+	bazel query "$bzlquery" | xargs bazel coverage --combined_report=lcov
+	dir=$(mktemp -d)
+	echo "Writing report to $dir/ ..."
+	genhtml --quiet --branch-coverage --output "$dir" $(bzl info output_path)/_coverage/_coverage_report.dat
+	echo "Opening report in browser..."
+	open "$dir/index.html"
+}

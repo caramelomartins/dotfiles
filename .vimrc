@@ -1,25 +1,77 @@
 set nocompatible
 
 call plug#begin()
+" Used for fuzzy finding. Allows to search words and files.
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'sheerun/vim-polyglot'
-Plug 'preservim/nerdtree'
-Plug 'phanviet/vim-monokai-pro'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Themes.
+Plug 'folke/tokyonight.nvim'
+Plug 'rose-pine/neovim'
+Plug 'nordtheme/vim'
+Plug 'rebelot/kanagawa.nvim'
+Plug 'ellisonleao/gruvbox.nvim'
+Plug 'rose-pine/neovim'
+Plug 'neanias/everforest-nvim', { 'branch': 'main' }
+" Adds guidelines to blanklines.
 Plug 'lukas-reineke/indent-blankline.nvim'
+" Automatically closes brackets.
+Plug 'm4xshen/autoclose.nvim'
+" Adds small signs that show changes in git."
+Plug 'lewis6991/gitsigns.nvim'
+" Adds statusline info.
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
+" File system explorer sidebar.
+Plug 'preservim/nerdtree'
+" Better LPS and code navigation for Go.
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Be able to navigate to Github easily.
+Plug 'knsh14/vim-github-link'
+" AI Assistants
+Plug 'nvim-lua/plenary.nvim'
+Plug 'greggh/claude-code.nvim'
 call plug#end()
 
+" Init lua-based plugins.
+:lua require('autoclose').setup({})
+:lua require('ibl').setup({})
+:lua require('gitsigns').setup({})
+:lua require('lualine').setup({})
+:lua require('nvim-treesitter.configs').setup({ highlight = { enable = true } })
+:lua require('claude-code').setup({ window = { split_ratio = 0.35, position = "vertical rightbelow" }, command_variants = { continue = "--continue" } })
+
 set termguicolors
-colorscheme monokai_pro
+colorscheme tokyonight-storm
 
-let g:lightline = {'colorscheme': 'monokai_pro'}
+" Configure fzf.
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
+" fzf_colors depends on having bat installed.
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 
-" Display numbers.
+" Improve whitespace.
+:set tabstop=4
+:set shiftwidth=4
+:set expandtab
+
+" Display line numbers.
 set number
 
-" Tabs have names of files, rather than path.
-set guitablabel=%t
+" Configuration for indentation.
+set list lcs=tab:\ \ ,space:⋅,eol:↴
 
 " Strip whitespace from the end of lines.
 function StripTrailingWhitespace ()
@@ -32,25 +84,34 @@ endfunction
 
 autocmd BufWritePre * call StripTrailingWhitespace()
 
-" Order imports on save.
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+" fzf.nvim configurations.
+nnoremap <c-w><c-f> :Files<cr>
+nnoremap <c-w><c-b> :Buffers<cr>
 
-" Format on save.
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.formatDocument')
+" Copy path of buffer to clipboard.
+:nnoremap <Leader>c :let @+=expand('%:p')<CR>
 
-" Configuration for indentation.
-set list lcs=tab:\ \ ,space:⋅,eol:↴
+" NERDTree
+let NERDTreeShowHidden=1
 
-let g:indent_blankline_show_end_of_line = v:true
-let g:indent_blankline_space_char_blankline = " "
+function NerdTreeToggle()
+    if &filetype == 'nerdtree'
+        :NERDTreeToggle
+    else
+        :NERDTreeFind
+    endif
+endfunction
 
-"""""""""""""""""""""""""
-" Suggested for coc.nvim.
-"""""""""""""""""""""""""
-set updatetime=300
-set encoding=utf-8
-set nobackup
-set nowritebackup
+nnoremap <F1> :call NerdTreeToggle()<CR>
+
+" Close all buffers except this one.
+map <leader>o :%bd\|e#<cr>
+
+autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.formatDocument')
+
+""""""""""""""""""""""
+" coc-nvim defaults.
+"""""""""""""""""""""""
 
 " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
 " utf-8 byte sequence

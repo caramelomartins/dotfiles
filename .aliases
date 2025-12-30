@@ -22,6 +22,7 @@ fi
 
 # Security
 alias sha1='openssl sha1'
+alias ask='ssh-add --apple-use-keychain ~/.ssh/id_ed25519'
 
 # Networking
 alias ping='ping -c 5'
@@ -46,3 +47,10 @@ alias kctx='kubectl config use-context'
 alias kctxs='kubectl config get-contexts'
 alias kc='kubectl config'
 alias kns='kubectl config set-context --current --namespace'
+
+# bazel
+alias gaz='bzl run //:gazelle'
+
+# git and Github
+alias gho='gh pr view --web'
+alias gcl='git fetch -p && for branch in $(git branch -vv | grep ": gone]" | awk "{print $1}""); do git branch -D $branch; done'

@@ -1,0 +1,21 @@
+{
+  "languageserver": {
+    "go": {
+      "command": "dd-gopls",
+      "rootPatterns": ["go.work", "go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "completion.usePlaceholders": true,
+        "build.directoryFilters": [
+            "-",
+            "+domains/deployments",
+            "+domains/eee/",
+            "+libs/"
+        ],
+        "build.env": {
+            "GOPLS_DISABLE_MODULE_LOADS": "1"
+        }
+      }
+    }
+  }
+}
