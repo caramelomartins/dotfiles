@@ -1,16 +1,70 @@
 {
   "permissions": {
     "allow": [
+      "mcp__atlassian__atlassianUserInfo",
       "mcp__atlassian__getAccessibleAtlassianResources",
       "mcp__atlassian__getConfluenceSpaces",
-      "mcp__atlassian__searchConfluenceUsingCql",
       "mcp__atlassian__getConfluencePage",
+      "mcp__atlassian__getPagesInConfluenceSpace",
+      "mcp__atlassian__getConfluencePageFooterComments",
+      "mcp__atlassian__getConfluencePageInlineComments",
+      "mcp__atlassian__getConfluencePageDescendants",
+      "mcp__atlassian__searchConfluenceUsingCql",
+      "mcp__atlassian__getJiraIssue",
+      "mcp__atlassian__getTransitionsForJiraIssue",
+      "mcp__atlassian__lookupJiraAccountId",
+      "mcp__atlassian__searchJiraIssuesUsingJql",
+      "mcp__atlassian__getJiraIssueRemoteIssueLinks",
+      "mcp__atlassian__getVisibleJiraProjects",
+      "mcp__atlassian__getJiraProjectIssueTypesMetadata",
+      "mcp__atlassian__search",
+      "mcp__atlassian__fetch",
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
       "Bash(bzl build:*)",
       "Bash(bzl test:*)",
-      "Bash(bzl run //:gazelle)"
-    ]
+      "Bash(bzl run //:gazelle)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(diff:*)",
+      "Bash(echo:*)",
+      "Bash(jq:*)",
+      "Bash(gaz:*)",
+      "Bash(which:*)",
+      "Bash(pup auth:*)",
+      "Bash(pup --help)",
+      "Read(*)",
+      "Bash(gt sync:*)",
+      "Bash(gt restack:*)",
+      "Bash(gt add:*)",
+      "Bash(gt continue:*)",
+      "Bash(gt submit:*)",
+      "Bash(gh api:*)",
+      "Bash(git fetch:*)",
+      "Bash(git show:*)",
+      "Bash(crane:*)"
+    ],
+    "defaultMode": "auto"
   },
-  "alwaysThinkingEnabled": false
+  "model": "opus[1m]",
+  "enabledPlugins": {
+    "nono@always-further": true,
+    "trajectory@trajectory": true
+  },
+  "extraKnownMarketplaces": {
+    "trajectory": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/hugo.martins/.trajectory/claude-marketplace"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "skipAutoPermissionPrompt": true,
+  "autoMemory": false
 }

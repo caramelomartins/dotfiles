@@ -22,7 +22,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 " File system explorer sidebar.
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree', {'branch': 'master'}
 " Better LPS and code navigation for Go.
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -31,6 +31,10 @@ Plug 'knsh14/vim-github-link'
 " AI Assistants
 Plug 'nvim-lua/plenary.nvim'
 Plug 'greggh/claude-code.nvim'
+" Support for git worktrees.
+Plug 'polarmutex/git-worktree.nvim'
+" Fuzzy Finder
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 " Init lua-based plugins.
@@ -38,8 +42,34 @@ call plug#end()
 :lua require('ibl').setup({})
 :lua require('gitsigns').setup({})
 :lua require('lualine').setup({})
-:lua require('nvim-treesitter').setup({ highlight = { enable = true } })
+:lua require('nvim-treesitter').setup({ ensure_installed = {"go"}, sync_install = true, auto_install = true, highlight = { enable = true }})
 :lua require('claude-code').setup({ window = { split_ratio = 0.35, position = "vertical rightbelow" }, command_variants = { continue = "--continue" } })
+:lua vim.g.git_worktree = { change_directory_command = "cd", update_on_change_command = "e .", clearjumps_on_change = true, autopush = false }
+
+lua << EOF
+require('telescope').setup({})
+require('telescope').load_extension("git_worktree")
+
+local Hooks = require("git-worktree.hooks")
+local config = require("git-worktree.config")
+local update_on_switch = Hooks.builtins.update_current_buffer_on_switch
+
+Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
+    update_on_switch(path, prev_path)
+end)
+
+Hooks.register(Hooks.type.DELETE, function()
+    vim.cmd(config.update_on_change_command)
+end)
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'go' },
+    callback = function()
+      -- syntax highlighting, provided by Neovim
+      vim.treesitter.start()
+    end,
+  })
+EOF
 
 set termguicolors
 colorscheme tokyonight-storm
@@ -108,6 +138,10 @@ nnoremap <F1> :call NerdTreeToggle()<CR>
 map <leader>o :%bd\|e#<cr>
 
 autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.formatDocument')
+
+" Integration between Telescope & git-worktree.
+nnoremap <leader>gws :Telescope git_worktree git_worktree<CR>
+nnoremap <leader>gwc :Telescope git_worktree create_git_worktree<CR>
 
 """"""""""""""""""""""
 " coc-nvim defaults.

@@ -12,8 +12,6 @@ fi
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-
 # Load auxiliary files.
 source "$HOME/.zsh_functions"
 source "$HOME/.aliases"
@@ -27,10 +25,6 @@ if command -v pyenv > /dev/null; then
       eval "$(pyenv init --path)"
 fi
 
-if [[ ! -d "$(pyenv root)/plugins/pyenv-virtualenv" ]]; then
-    eval "$(pyenv virtualenv-init -)"
-fi
-
 # Homebrew
 if [[ $OSTYPE == 'linux-gnu' ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
@@ -42,9 +36,12 @@ FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 export ZSH=$HOME/.oh-my-zsh
 
 ZSH_THEME="amuse"
-plugins=(git pyenv helm kube-ps1)
+plugins=(git pyenv helm kube-ps1 bazel)
 
 source $ZSH/oh-my-zsh.sh
+
+# zsh-autosuggestions plugins
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # kube-ps1.sh
 if [[ $OSTYPE == 'darwin'* ]]; then
@@ -80,10 +77,19 @@ if [ -d "$HOME/.zsh/" ]; then
   done
 fi
 
-# Gitlab
-export GITLAB_TOKEN=$(security find-generic-password -a ${USER} -s gitlab_token -w)
-
 # Add signing key for Github commit signing.
 ssh-add -l | grep -q ED25519 || ssh-add --apple-use-keychain ~/.ssh/id_ed25519
 
 PS1='$(kube_ps1)'$PS1
+
+export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
+export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+
+# BEGIN SCFW MANAGED BLOCK
+alias npm="scfw run npm"
+alias pip="scfw run pip"
+alias poetry="scfw run poetry"
+export SCFW_DD_AGENT_LOG_PORT="10365"
+export SCFW_DD_LOG_LEVEL="ALLOW"
+export SCFW_HOME="/Users/hugo.martins/.scfw"
+# END SCFW MANAGED BLOCK

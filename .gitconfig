@@ -18,6 +18,7 @@
     editor = nvim
     excludesfile = ~/.gitignore
     pager = delta
+	fsmonitor = false
 
 [interactive]
     diffFilter = delta --color-only
@@ -33,6 +34,7 @@
 
 [include]
     path = "~/.gitconfig.local"
+	path = /Users/hugo.martins/.config/datadog/git/config
 
 [includeIf "gitdir:~/pp/"]
     path = "~/pp/.gitconfig"
